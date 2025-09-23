@@ -1,0 +1,319 @@
+
+{
+  "placeholderImages": [
+    {
+      "id": "hero-background",
+      "description": "Stylish person wearing modern clothes in an urban setting.",
+      "imageUrl": "https://picsum.photos/seed/hero/1920/1080",
+      "imageHint": "fashion model"
+    },
+    {
+        "id": "product-9",
+        "description": "Comfortable cotton t-shirt featuring local artwork.",
+        "imageUrl": "https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?w=400",
+        "imageHint": "artisan clothing"
+    },
+    {
+        "id": "product-10",
+        "description": "Pure, raw honey harvested from local beehives.",
+        "imageUrl": "https://images.unsplash.com/photo-1558642452-9d2a7deb7f62?w=400",
+        "imageHint": "organic honey"
+    },
+    {
+        "id": "product-11",
+        "description": "Professional web development services for local businesses.",
+        "imageUrl": "https://images.unsplash.com/photo-1461749280684-dccba630e2f6?w=400",
+        "imageHint": "web development"
+    },
+    {
+        "id": "product-12",
+        "description": "Logo Design Expert, Banners photos etc Professional logo design services for local businesses.",
+        "imageUrl": "https://images.unsplash.com/photo-1626785774573-4b799315345d?w=400",
+        "imageHint": "graphic design"
+    },
+    {
+        "id": "product-13",
+        "description": "Expert business consulting to help local entrepreneurs grow their ventures.",
+        "imageUrl": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTasSxirvhWW8HM8kpaoy9SqPQ7yKf5YXfaAg&s",
+        "imageHint": "business consulting"
+    },
+    {
+        "id": "product-14",
+        "description": "A selection of fresh, organic vegetables sourced directly from local farms.",
+        "imageUrl": "https://images.unsplash.com/photo-1540420773420-3366772f4999?w=400",
+        "imageHint": "fresh vegetables"
+    },
+    {
+        "id": "product-15",
+        "description": "Samsung Galaxy A05 - 6.7\" 4GB RAM 64GB ROM 50MP 5000mAh - Black",
+        "imageUrl": "https://ug.jumia.is/unsafe/fit-in/500x500/filters:fill(white)/product/83/4784052/1.jpg",
+        "imageHint": "samsung phone"
+    },
+    {
+        "id": "product-16",
+        "description": "Beautiful handcrafted wooden set made from locally sourced sustainable wood.",
+        "imageUrl": "https://cdn.prod.website-files.com/6390e14cc734a9327343/679c741cfd2f81997c15fb20_Featured-image.jpg",
+        "imageHint": "handcrafted wood"
+    },
+    {
+        "id": "product-17",
+        "description": "Portable Bluetooth speaker with deep bass (woofer) and crystal-clear sound.",
+        "imageUrl": "https://kwttechmart.ug/cdn/shop/products/wster-ws-mini-speaker-with-fm-radio-micro-sd-usb-black-grey-897263.jpg?v=1703327442",
+        "imageHint": "bluetooth speaker"
+    },
+    {
+        "id": "product-18",
+        "description": "Latest model smartphone with a stunning OLED display, powerful processor, and an advanced camera system.",
+        "imageUrl": "https://images.unsplash.com/photo-1580910051074-3eb694886505?w=400",
+        "imageHint": "iphone x"
+    },
+    {
+        "id": "product-19",
+        "description": "Immerse yourself in music with these high-fidelity, noise-cancelling wireless earphones.",
+        "imageUrl": "https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=400",
+        "imageHint": "wireless earphones"
+    },
+    {
+        "id": "product-20",
+        "description": "Comfortable and stylish hoodie made from premium cotton.",
+        "imageUrl": "https://images.unsplash.com/photo-1556157382-97eda2d62296?w=400",
+        "imageHint": "graphic hoodie"
+    },
+    {
+        "id": "product-21",
+        "description": "Genuine leather bag, handcrafted by local artisans.",
+        "imageUrl": "https://images.unsplash.com/photo-1594223274512-ad4803739b7c?w=400",
+        "imageHint": "leather bag"
+    },
+    {
+        "id": "product-22",
+        "description": "High-quality denim jeans with a modern slim fit.",
+        "imageUrl": "https://img.kwcdn.com/thumbnail/s/ca78b9d3b529872afa4c1cfc070f4d1f_ca91a1976758.jpg?imageView2/2/w/264/q/70/format/webp",
+        "imageHint": "denim jeans"
+    },
+    {
+        "id": "product-23",
+        "description": "Prime residential plot of land (100x100ft) for sale in a fast-developing area of Kasanje.",
+        "imageUrl": "https://www.jtgholdings.com/wp-content/uploads/2020/12/land.jpg",
+        "imageHint": "land plot"
+    },
+    {
+        "id": "product-24",
+        "description": "Classic men's formal shoes made from 100% genuine Ugandan leather.",
+        "imageUrl": "https://images.unsplash.com/photo-1549298916-b41d501d3772?w=400",
+        "imageHint": "leather shoes"
+    },
+    {
+        "id": "product-25",
+        "description": "Beautiful, custom-tailored dress made from high-quality Kitenge (Ankara) fabric.",
+        "imageUrl": "https://img.kwcdn.com/product/fancy/82a0b8b6-17bc-4a3f-b126-fbec37588fef.jpg?imageView2/2/w/800/q/70/format/webp",
+        "imageHint": "kitenge dress"
+    },
+    {
+        "id": "product-26",
+        "description": "An affordable and reliable Tecno Spark smartphone with a large screen, good battery life, and 64GB of storage.",
+        "imageUrl": "https://images.unsplash.com/photo-1601784551446-20c9e07cdbf1?w=400",
+        "imageHint": "tecno spark"
+    },
+    {
+        "id": "product-27",
+        "description": "High-fidelity over-ear headphones for music lovers and professionals.",
+        "imageUrl": "https://images.unsplash.com/photo-1546435770-a3e426bf4022?w=400",
+        "imageHint": "over-ear headphones"
+    },
+    {
+        "id": "product-28",
+        "description": "Strong, healthy Boer goat ready for breeding.",
+        "imageUrl": "https://images.unsplash.com/photo-1598585483985-97a44a751682?w=400",
+        "imageHint": "boer goat"
+    },
+    {
+        "id": "product-29",
+        "description": "5.1 channel home theatre system with a powerful subwoofer (woofer) for an immersive cinema experience.",
+        "imageUrl": "https://images.unsplash.com/photo-1593359677879-a4bb92f8264a?w=400",
+        "imageHint": "home theatre"
+    },
+    {
+        "id": "product-30",
+        "description": "High-quality, locally milled maize flour (Kawuunga).",
+        "imageUrl": "https://images.unsplash.com/photo-1627481172265-5f9f25715206?w=400",
+        "imageHint": "maize flour"
+    },
+    {
+        "id": "product-31",
+        "description": "Elegant and comfortable flat sandals for ladies, decorated with local beads.",
+        "imageUrl": "https://images.unsplash.com/photo-1603487742131-411a7917f3b6?w=400",
+        "imageHint": "fashion sandals"
+    },
+    {
+        "id": "product-32",
+        "description": "A complete solar power kit for your home. Includes a 150W panel, battery, inverter, and bulbs.",
+        "imageUrl": "https://images.unsplash.com/photo-1508514177221-188b1cf16e9c?w=400",
+        "imageHint": "solar power"
+    },
+    {
+        "id": "product-33",
+        "description": "A classic pack of 6 Coca-Cola bottles to share with family and friends.",
+        "imageUrl": "https://images.unsplash.com/photo-1554866585-CD94860890b7?w=400",
+        "imageHint": "coca cola"
+    },
+    {
+        "id": "product-34",
+        "description": "Delicious and refreshing mango juice, packed with vitamins.",
+        "imageUrl": "https://images.unsplash.com/photo-1625772299848-391b6a87d7b3?w=400",
+        "imageHint": "mango juice"
+    },
+    {
+        "id": "product-35",
+        "description": "A delicious icing covered, handmade, Princesses fairy tale cake.",
+        "imageUrl": "https://sweetcakesug.com/uploads/images/202408/img_x300_66b91964622099-55664427-26204888.jpg",
+        "imageHint": "birthday cake"
+    },
+    {
+        "id": "product-36",
+        "description": "Stay hydrated with a pack of 12 Rwenzori mineral water bottles.",
+        "imageUrl": "https://owino.ug/wp-content/uploads/2024/10/Screenshot_20241015_214658_Chrome.jpg",
+        "imageHint": "mineral water"
+    },
+    {
+        "id": "product-37",
+        "description": "It is made from natural apple juice concentrates giving a sweet & distinct taste of apple juice flavour.",
+        "imageUrl": "https://ug.jumia.is/unsafe/fit-in/500x500/filters:fill(white)/product/83/242441/1.jpg?8548",
+        "imageHint": "apple juice"
+    },
+    {
+        "id": "product-38",
+        "description": "Get a boost of energy with this 4-pack of RockBoom energy drinks.",
+        "imageUrl": "https://ug.jumia.is/unsafe/fit-in/500x500/filters:fill(white)/product/73/242441/1.jpg?0522",
+        "imageHint": "energy drink"
+    },
+    {
+        "id": "product-39",
+        "description": "A family-sized selection box of assorted biscuits.",
+        "imageUrl": "https://images.unsplash.com/photo-1589704259833-3a1a6e5562d4?w=400",
+        "imageHint": "biscuit box"
+    },
+    {
+        "id": "product-40",
+        "description": "Djack DJ-903L, AC&DC 3.1 X-Bass, Bluetooth Home Theatre Multimedia Speaker System with FM Radio, USB & SD Ports - Black",
+        "imageUrl": "https://ug.jumia.is/unsafe/fit-in/500x500/filters:fill(white)/product/88/017162/1.jpg?2309",
+        "imageHint": "home theater"
+    },
+    {
+        "id": "product-41",
+        "description": "USED RENEWED Oppo Refurbished OPPO F7 6.2 FHD+ 4GB +64GB Black1",
+        "imageUrl": "https://ug.jumia.is/unsafe/fit-in/500x500/filters:fill(white)/product/90/8018632/1.jpg?2683",
+        "imageHint": "oppo phone"
+    },
+    {
+        "id": "product-8",
+        "description": "Berrykey Mens Vintage Hawaii Beach Shirt Casual Graffiti Ink Shirts",
+        "imageUrl": "https://ug.jumia.is/unsafe/fit-in/500x500/filters:fill(white)/product/40/3837522/1.jpg?1402",
+        "imageHint": "hawaiian shirt"
+    },
+    {
+        "id": "product-7",
+        "description": "Multiple Pockets Pants Cylinder Loose Broad Leg Waist Casual Male Trousers",
+        "imageUrl": "https://ug.jumia.is/unsafe/fit-in/500x500/filters:fill(white)/product/45/5223691/1.jpg?5847",
+        "imageHint": "cargo pants"
+    },
+    {
+        "id": "product-6",
+        "description": "Riham Oner Mango Juice -12*500ml",
+        "imageUrl": "https://ug.jumia.is/unsafe/fit-in/500x500/filters:fill(white)/product/63/242441/1.jpg?9629",
+        "imageHint": "mango juice"
+    },
+    {
+        "id": "product-5",
+        "description": "Professional computer studies for anyone who needs the skills of computing.",
+        "imageUrl": "https://thumbs.dreamstime.com/z/computer-studies-portrait-smart-lad-looking-camera-lesson-33210280.jpg?ct=jpeg",
+        "imageHint": "computer class"
+    },
+    {
+      "id": "about-us",
+      "description": "Interior of a modern and bright fashion boutique.",
+      "imageUrl": "https://picsum.photos/seed/about/800/600",
+      "imageHint": "fashion boutique"
+    },
+    {
+      "id": "avatar-1",
+      "description": "Portrait of a smiling man.",
+      "imageUrl": "https://picsum.photos/seed/a1/100/100",
+      "imageHint": "smiling man"
+    },
+    {
+      "id": "avatar-2",
+      "description": "Portrait of a woman with glasses.",
+      "imageUrl": "https://picsum.photos/seed/a2/100/100",
+      "imageHint": "woman glasses"
+    },
+    {
+      "id": "avatar-3",
+      "description": "Portrait of a person with short hair.",
+      "imageUrl": "https://picsum.photos/seed/a3/100/100",
+      "imageHint": "person portrait"
+    },
+    {
+      "id": "avatar-4",
+      "description": "Portrait of a smiling woman.",
+      "imageUrl": "https://picsum.photos/seed/a4/100/100",
+      "imageHint": "smiling woman"
+    },
+    {
+      "id": "avatar-5",
+      "description": "Portrait of a man with a beard.",
+      "imageUrl": "https://picsum.photos/seed/a5/100/100",
+      "imageHint": "man beard"
+    },
+    {
+      "id": "avatar-6",
+      "description": "Portrait of a person looking happy.",
+      "imageUrl": "https://picsum.photos/seed/a6/100/100",
+      "imageHint": "happy person"
+    },
+    {
+      "id": "avatar-7",
+      "description": "Portrait of a young man.",
+      "imageUrl": "https://picsum.photos/seed/a7/100/100",
+      "imageHint": "young man"
+    },
+    {
+      "id": "avatar-8",
+      "description": "Portrait of a young woman.",
+      "imageUrl": "https://picsum.photos/seed/a8/100/100",
+      "imageHint": "young woman"
+    },
+    {
+      "id": "feed-1",
+      "description": "Bright summer clothes on a rack.",
+      "imageUrl": "https://picsum.photos/seed/feed1/800/450",
+      "imageHint": "summer fashion"
+    },
+    {
+      "id": "feed-2",
+      "description": "Balloons and confetti for a celebration.",
+      "imageUrl": "https://picsum.photos/seed/feed2/800/450",
+      "imageHint": "store celebration"
+    },
+    {
+      "id": "feed-3",
+      "description": "A stylishly decorated living room.",
+      "imageUrl": "https://picsum.photos/seed/feed3/800/450",
+      "imageHint": "home interior"
+    },
+    {
+      "id": "lost-item-1",
+      "description": "A samsung note 8 phone.",
+      "imageUrl": "https://picsum.photos/seed/lost1/400/400",
+      "imageHint": "samsung phone"
+    },
+    {
+      "id": "lost-item-2",
+      "description": "An iPhone 12 pro with earbuds.",
+      "imageUrl": "https://picsum.photos/seed/lost2/400/400",
+      "imageHint": "iphone earbuds"
+    }
+  ]
+}
+
+    
