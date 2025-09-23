@@ -1,39 +1,47 @@
-
 import Image from 'next/image';
 import { Card, CardContent } from '@/components/ui/card';
-import type { ImagePlaceholder } from '@/lib/placeholder-images';
 import { Button } from '@/components/ui/button';
-import { ShoppingCart, Star } from 'lucide-react';
+import { ShoppingCart } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
 import { RatingStars } from '@/components/ui/rating-stars';
 import { useCart } from '@/hooks/use-cart';
 
 export interface Product {
   id: string;
-  name: string;
-  price?: string;
-  imageId: string;
-  category?: string;
+  title: string;
+  description: string;
+  price: number;
+  currency: string;
+  category: string;
+  image_url: string;
   rating: number;
-  reviewCount: number;
-}
-interface ProductCardProps {
-  product: Product;
-  image?: ImagePlaceholder;
+  review_count: number;
+  seller_name: string;
+  in_stock: boolean;
+  created_dt: string;
+  updated_dt: string;
+  user_id: string;
+  created_by: string;
 }
 
-export function ProductCard({ product, image }: ProductCardProps) {
+interface ProductCardProps {
+  product: Product;
+}
+
+export function ProductCard({ product }: ProductCardProps) {
   const { addToCart } = useCart();
-  const { name, price, category, rating, reviewCount } = product;
+  const { 
+    title, price, currency, category, rating, review_count, image_url, 
+    seller_name, in_stock 
+  } = product;
 
   return (
     <Card className="overflow-hidden transition-all duration-300 hover:shadow-xl group rounded-lg">
       <div className="aspect-square relative overflow-hidden">
-        {image ? (
+        {image_url ? (
           <Image
-            src={image.imageUrl}
-            alt={image.description}
-            data-ai-hint={image.imageHint}
+            src={image_url}
+            alt={title}
             fill
             className="object-cover transition-transform duration-300 group-hover:scale-105"
           />
@@ -48,13 +56,17 @@ export function ProductCard({ product, image }: ProductCardProps) {
       </div>
       <CardContent className="p-3 space-y-2">
         {category && <Badge variant="secondary" className="text-blue-600 bg-blue-100">{category}</Badge>}
-        <h3 className="font-semibold font-body line-clamp-2 text-base">{name}</h3>
-        {price && <p className="text-lg font-bold text-primary">UGX {price}</p>}
+        <h3 className="font-semibold font-body line-clamp-2 text-base">{title}</h3>
+        <div className="flex items-center gap-2">
+          {price && <p className="text-lg font-bold text-primary">{currency} {price}</p>}
+          {!in_stock && <Badge variant="destructive">Out of Stock</Badge>}
+        </div>
         <div className="flex items-center gap-1 text-sm text-muted-foreground">
             <RatingStars rating={rating} />
-            <span>({reviewCount})</span>
+            <span>({review_count})</span>
         </div>
-        <Button variant="outline" className="w-full border-green-500 text-green-500 hover:bg-green-500 hover:text-white" onClick={() => addToCart(product)}>
+        {seller_name && <div className="text-xs text-muted-foreground">Seller: {seller_name}</div>}
+        <Button variant="outline" className="w-full border-green-500 text-green-500 hover:bg-green-500 hover:text-white" onClick={() => addToCart(product)} disabled={!in_stock}>
             <ShoppingCart />
             Add to Cart
         </Button>
