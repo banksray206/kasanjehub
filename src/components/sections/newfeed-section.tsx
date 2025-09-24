@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import Link from 'next/link';
@@ -12,7 +12,32 @@ import { useAuth } from '@/hooks/use-auth';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
 import CreditBanner from '../credit-banner';
 import { formatDistanceToNow } from 'date-fns';
-import { fetchPosts } from '@/app/newfeed/actions';
+
+type Post = {
+  id: string;
+  content?: string;
+  description?: string;
+  image_url?: string;
+  created_date?: string;
+  author?: string;
+  user_id?: string;
+  avatar_url?: string;
+  likes?: number;
+  comments?: number;
+};
+
+type Advertisement = {
+  id: string;
+  title: string;
+  description?: string;
+  image_url?: string;
+  created_date?: string;
+};
+
+interface NewfeedSectionProps {
+  initialPosts: Post[];
+  initialAds: Advertisement[];
+}
 
 function CreatePostCard() {
   const [postContent, setPostContent] = useState('');
@@ -86,83 +111,120 @@ function CreatePostCard() {
   );
 }
 
-export default function NewfeedSection() {
-  const [posts, setPosts] = useState<any[]>([]);
-  const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
-    async function loadPosts() {
-      try {
-        const data = await fetchPosts();
-        setPosts(data || []);
-      } catch (err) {
-        setPosts([]);
-      } finally {
-        setLoading(false);
-      }
+// Helper to mix ads into posts
+function insertAdsRandomly<T, A>(items: T[], ads: A[], adFrequency = 5): (T | { ad: A })[] {
+  const result: (T | { ad: A })[] = [];
+  let adIndex = 0;
+  for (let i = 0; i < items.length; i++) {
+    result.push(items[i]);
+    if ((i + 1) % adFrequency === 0 && adIndex < ads.length) {
+      result.push({ ad: ads[adIndex++] });
     }
-    loadPosts();
-  }, []);
+  }
+  while (adIndex < ads.length) {
+    result.push({ ad: ads[adIndex++] });
+  }
+  return result;
+}
+
+// Advertisement card (distinct style)
+function AdvertisementCard({ ad }: { ad: Advertisement & { message?: string } }) {
+  return (
+    <div className="flex border-2 border-yellow-400 bg-yellow-50 rounded-lg p-4 mb-6 shadow-lg items-center gap-4">
+      <div className="flex-shrink-0">
+        {ad.image_url ? (
+          <img
+            src={ad.image_url}
+            alt={ad.title}
+            width={80}
+            height={80}
+            className="rounded-lg object-cover border border-yellow-300"
+          />
+        ) : (
+          <div className="w-20 h-20 rounded-lg bg-yellow-100 flex items-center justify-center text-yellow-400 text-3xl font-bold border border-yellow-200">
+            AD
+          </div>
+        )}
+      </div>
+      <div className="flex flex-col flex-grow">
+        <span className="uppercase text-xs font-bold text-yellow-700 tracking-widest mb-1">
+          Sponsored
+        </span>
+        <h3 className="font-semibold text-lg text-yellow-900 mb-1">{ad.title}</h3>
+        <p className="text-yellow-800 text-sm mb-1">{ad.description}</p>
+        {ad.message && (
+          <div className="text-sm text-yellow-900 font-semibold mb-1">{ad.message}</div>
+        )}
+        <div className="text-xs text-yellow-700 mt-1">
+          {ad.created_date ? `Posted: ${ad.created_date}` : 'Sponsored'}
+        </div>
+      </div>
+    </div>
+  );
+}
+
+// Post card
+function PostCard({ post }: { post: Post }) {
+  const timeAgo = post.created_date
+    ? formatDistanceToNow(new Date(post.created_date), { addSuffix: true })
+    : '';
+  return (
+    <div className="border rounded-lg p-6 mb-6 bg-white shadow">
+      <div className="flex items-start gap-4">
+        <Avatar>
+          {post.avatar_url && <AvatarImage src={post.avatar_url} alt={post.author || post.user_id || 'U'} />}
+          <AvatarFallback>{(post.author || post.user_id || 'U')[0].toUpperCase()}</AvatarFallback>
+        </Avatar>
+        <div className="flex-grow">
+          <div className="flex items-center gap-2">
+            <span className="font-bold">{post.author || post.user_id || 'Unknown'}</span>
+            <span className="text-sm text-muted-foreground">{timeAgo}</span>
+          </div>
+          <p className="mt-2 text-foreground/90 whitespace-pre-wrap">{post.content || post.description}</p>
+          {post.image_url && (
+            <div className="mt-4 rounded-lg overflow-hidden border">
+              <Image
+                src={post.image_url}
+                alt="Feed item media"
+                width={800}
+                height={450}
+                className="object-cover w-full"
+              />
+            </div>
+          )}
+          <div className="flex items-center gap-6 mt-4 text-muted-foreground">
+            <button className="flex items-center gap-2 hover:text-primary transition-colors">
+              <Heart className="h-5 w-5" />
+              <span>{post.likes ?? 0}</span>
+            </button>
+            <button className="flex items-center gap-2 hover:text-primary transition-colors">
+              <MessageCircle className="h-5 w-5" />
+              <span>{post.comments ?? 0}</span>
+            </button>
+            <button className="flex items-center gap-2 hover:text-primary transition-colors">
+              <Share2 className="h-5 w-5" />
+              <span>Share</span>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+export default function NewfeedSection({ initialPosts, initialAds }: NewfeedSectionProps) {
+  const mixedFeed = insertAdsRandomly(initialPosts, initialAds, 5);
 
   return (
     <div className="space-y-6">
       <CreditBanner />
       <CreatePostCard />
-
-      {loading ? (
-        <div className="text-center text-muted-foreground">Loading posts...</div>
-      ) : posts.length === 0 ? (
-        <div className="text-center text-muted-foreground">No posts found.</div>
-      ) : (
-        posts.map((item) => {
-          const timeAgo = formatDistanceToNow(new Date(item.created_date), { addSuffix: true });
-          return (
-            <Card key={item.id}>
-              <CardContent className="p-6">
-                <div className="flex items-start gap-4">
-                  <Avatar>
-                    {item.avatar_url && <AvatarImage src={item.avatar_url} alt={item.author || item.user_id} />}
-                    <AvatarFallback>{(item.author || item.user_id || 'U')[0].toUpperCase()}</AvatarFallback>
-                  </Avatar>
-                  <div className="flex-grow">
-                    <div className="flex items-center gap-2">
-                      <span className="font-bold">{item.author || item.user_id || 'Unknown'}</span>
-                      <span className="text-sm text-muted-foreground">{timeAgo}</span>
-                    </div>
-                    <p className="mt-2 text-foreground/90 whitespace-pre-wrap">{item.content || item.description}</p>
-
-                    {item.image_url && (
-                      <div className="mt-4 rounded-lg overflow-hidden border">
-                        <Image
-                          src={item.image_url}
-                          alt="Feed item media"
-                          width={800}
-                          height={450}
-                          className="object-cover w-full"
-                        />
-                      </div>
-                    )}
-
-                    <div className="flex items-center gap-6 mt-4 text-muted-foreground">
-                      <button className="flex items-center gap-2 hover:text-primary transition-colors">
-                        <Heart className="h-5 w-5" />
-                        <span>{item.likes ?? 0}</span>
-                      </button>
-                      <button className="flex items-center gap-2 hover:text-primary transition-colors">
-                        <MessageCircle className="h-5 w-5" />
-                        <span>{item.comments ?? 0}</span>
-                      </button>
-                      <button className="flex items-center gap-2 hover:text-primary transition-colors">
-                        <Share2 className="h-5 w-5" />
-                        <span>Share</span>
-                      </button>
-                    </div>
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
-          );
-        })
+      {mixedFeed.map((item, idx) =>
+        'ad' in item ? (
+          <AdvertisementCard key={`ad-${item.ad.id}`} ad={item.ad} />
+        ) : (
+          <PostCard key={item.id} post={item} />
+        )
       )}
     </div>
   );
