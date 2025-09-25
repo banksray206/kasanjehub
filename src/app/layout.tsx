@@ -5,10 +5,13 @@ import { cn } from '@/lib/utils';
 import { Toaster } from "@/components/ui/toaster";
 import { AuthProvider } from '@/hooks/use-auth';
 import { CartProvider } from '@/hooks/use-cart';
+// Adjust the import path and/or filename as needed, for example:
+import BottomNav from '@/components/layout/bottom-nav';
+// or if the file is bottom-nav.tsx, ensure the file exists at the specified path
 
 export const metadata: Metadata = {
-  title: 'Kasanjeshop Mirror',
-  description: 'A mirrored version of kasanjeshop.base44.app, created with sophistication and trust.',
+  title: 'Kasanjeshop',
+  description: 'Kasanje Shop is a community app for kasanje community for delivering service like store , community news and chatting and findinf lost items in the community',
 };
 
 export default function RootLayout({
@@ -26,7 +29,10 @@ export default function RootLayout({
       <body className={cn("font-body antialiased")}>
         <AuthProvider>
           <CartProvider>
-            {children}
+            <div className="pb-20 md:pb-0">
+              {children}
+            </div>
+            <BottomNav />
             <Toaster />
           </CartProvider>
         </AuthProvider>

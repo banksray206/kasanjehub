@@ -2,13 +2,11 @@
 
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-import { Menu, Home, Store, Newspaper, MapPin, Medal, User, LogIn, LogOut, MessageSquare, Shield } from 'lucide-react';
+import { Store, Newspaper, MapPin, Medal, User, LogIn, LogOut, MessageSquare, Shield } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
-import { useState } from 'react';
 import { useAuth } from '@/hooks/use-auth';
-import { supabase } from '@/lib/supabase';
 import { useToast } from '@/hooks/use-toast';
+import { supabase } from '@/lib/supabase';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -17,8 +15,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
-import { Avatar, AvatarFallback, AvatarImage } from '../ui/avatar';
-
+import { Avatar, AvatarFallback } from '../ui/avatar';
 
 const navLinks = [
   { href: '/', label: 'Marketplace', icon: Store },
@@ -29,7 +26,6 @@ const navLinks = [
 ];
 
 export default function Header() {
-  const [isSheetOpen, setIsSheetOpen] = useState(false);
   const { user, loading } = useAuth();
   const router = useRouter();
   const { toast } = useToast();
@@ -37,9 +33,13 @@ export default function Header() {
   const isAdmin = user && user.email && adminEmails.includes(user.email);
 
   const handleLogout = async () => {
-    await supabase.auth.signOut();
-    toast({ title: 'Logged Out', description: 'You have been successfully logged out.' });
-    router.push('/login');
+    try {
+      await supabase.auth.signOut();
+      toast({ title: 'Logged Out', description: 'You have been successfully logged out.' });
+      router.push('/login');
+    } catch (error) {
+      toast({ variant: 'destructive', title: 'Logout Failed', description: 'Something went wrong.' });
+    }
   };
 
   return (
@@ -117,46 +117,6 @@ export default function Header() {
               )}
             </>
           )}
-          <div className="md:hidden">
-            <Sheet open={isSheetOpen} onOpenChange={setIsSheetOpen}>
-              <SheetTrigger asChild>
-                <Button variant="ghost" size="icon">
-                  <Menu className="h-6 w-6" />
-                  <span className="sr-only">Open menu</span>
-                </Button>
-              </SheetTrigger>
-              <SheetContent side="right" className="w-[300px] p-0">
-                <div className="flex flex-col h-full">
-                  <div className="flex justify-start items-center p-4 border-b">
-                     <Link href="/" className="flex items-center gap-2 text-xl font-bold font-headline text-primary" onClick={() => setIsSheetOpen(false)}>
-                        <Home className="h-6 w-6 text-accent" />
-                        <span>Kasanje</span>
-                     </Link>
-                  </div>
-                  <nav className="flex flex-col gap-4 p-4 text-lg">
-                    {navLinks.map((link) => (
-                      <Link key={link.label} href={link.href} className="flex items-center gap-3 text-foreground/80 transition-colors hover:text-foreground" onClick={() => setIsSheetOpen(false)}>
-                        <link.icon className="h-5 w-5" />
-                        {link.label}
-                      </Link>
-                    ))}
-                    {user && (
-                       <Link href="/profile" className="flex items-center gap-3 text-foreground/80 transition-colors hover:text-foreground" onClick={() => setIsSheetOpen(false)}>
-                          <User className="h-5 w-5" />
-                          Profile
-                        </Link>
-                    )}
-                     {isAdmin && (
-                        <Link href="/admin" className="flex items-center gap-3 text-foreground/80 transition-colors hover:text-foreground" onClick={() => setIsSheetOpen(false)}>
-                            <Shield className="h-5 w-5" />
-                            Admin
-                        </Link>
-                    )}
-                  </nav>
-                </div>
-              </SheetContent>
-            </Sheet>
-          </div>
         </div>
       </div>
     </header>
