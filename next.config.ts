@@ -1,4 +1,3 @@
-
 import type {NextConfig} from 'next';
 
 const nextConfig: NextConfig = {
@@ -90,9 +89,12 @@ const nextConfig: NextConfig = {
         pathname: '/**',
       },
     ],
+    domains: [
+      'egruhckzxqulbmrpzhbp.supabase.co',
+      // add other domains if needed
+    ],
   },
 };
 
 export default nextConfig;
 
-    

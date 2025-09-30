@@ -12,6 +12,8 @@ import { useAuth } from '@/hooks/use-auth';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
 import CreditBanner from '../credit-banner';
 import { formatDistanceToNow } from 'date-fns';
+import { createPost } from '@/app/newfeed/actions'; // Add this import
+import { supabase } from '@/lib/supabase';
 
 type Post = {
   id: string;
@@ -41,7 +43,13 @@ interface NewfeedSectionProps {
 
 function CreatePostCard() {
   const [postContent, setPostContent] = useState('');
+  const [loading, setLoading] = useState(false);
+  const [file, setFile] = useState<File | null>(null);
+  const [fileType, setFileType] = useState<'image' | 'video' | 'sticker' | null>(null);
   const { user } = useAuth();
+
+  // Add this state to trigger feed refresh if needed
+  // const [_, setRefresh] = useState(0);
 
   if (!user) {
     return (
@@ -58,6 +66,59 @@ function CreatePostCard() {
       </Card>
     );
   }
+
+  // Add this handler
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>, type: 'image' | 'video' | 'sticker') => {
+    if (e.target.files && e.target.files[0]) {
+      setFile(e.target.files[0]);
+      setFileType(type);
+    }
+  };
+
+  const handleSubmit = async () => {
+    if (!postContent.trim() && !file) return;
+    setLoading(true);
+    let image_url, video_url, sticker_url;
+
+    try {
+      // Upload file if present
+      if (file && user) {
+        const ext = file.name.split('.').pop();
+        const filePath = `${user.id}/${Date.now()}.${ext}`;
+        const { data, error } = await supabase.storage
+          .from('post-media')
+          .upload(filePath, file);
+
+        if (error) throw error;
+
+        const { data: publicUrlData } = supabase.storage
+          .from('post-media')
+          .getPublicUrl(filePath);
+
+        if (fileType === 'image') image_url = publicUrlData.publicUrl;
+        if (fileType === 'video') video_url = publicUrlData.publicUrl;
+        if (fileType === 'sticker') sticker_url = publicUrlData.publicUrl;
+      }
+
+      await createPost({
+        content: postContent,
+        user_id: user.id,
+        author: user.email || 'Anonymous',
+        image_url,
+        video_url,
+        sticker_url,
+      });
+      setPostContent('');
+      setFile(null);
+      setFileType(null);
+      // Optionally trigger a feed refresh here
+      // setRefresh(r => r + 1);
+    } catch (err) {
+      alert('Failed to create post');
+    } finally {
+      setLoading(false);
+    }
+  };
 
   return (
     <Dialog>
@@ -94,17 +155,49 @@ function CreatePostCard() {
         </div>
         <div className="mt-4 flex justify-between items-center">
           <div className="flex gap-2 text-muted-foreground">
-            <Button variant="ghost" size="icon" className="hover:bg-blue-100 hover:text-blue-600">
-              <ImageIcon className="h-6 w-6" />
+            {/* Image upload */}
+            <Button asChild variant="ghost" size="icon" className="hover:bg-blue-100 hover:text-blue-600">
+              <label>
+                <ImageIcon className="h-6 w-6" />
+                <input
+                  type="file"
+                  accept="image/*"
+                  className="hidden"
+                  onChange={e => handleFileChange(e, 'image')}
+                />
+              </label>
             </Button>
-            <Button variant="ghost" size="icon" className="hover:bg-green-100 hover:text-green-600">
-              <Video className="h-6 w-6" />
+            {/* Video upload */}
+            <Button asChild variant="ghost" size="icon" className="hover:bg-green-100 hover:text-green-600">
+              <label>
+                <Video className="h-6 w-6" />
+                <input
+                  type="file"
+                  accept="video/*"
+                  className="hidden"
+                  onChange={e => handleFileChange(e, 'video')}
+                />
+              </label>
             </Button>
-            <Button variant="ghost" size="icon" className="hover:bg-yellow-100 hover:text-yellow-600">
-              <Smile className="h-6 w-6" />
+            {/* Sticker upload (could be image/gif) */}
+            <Button asChild variant="ghost" size="icon" className="hover:bg-yellow-100 hover:text-yellow-600">
+              <label>
+                <Smile className="h-6 w-6" />
+                <input
+                  type="file"
+                  accept="image/*"
+                  className="hidden"
+                  onChange={e => handleFileChange(e, 'sticker')}
+                />
+              </label>
             </Button>
+            {file && (
+              <span className="text-xs text-green-700 ml-2">{file.name}</span>
+            )}
           </div>
-          <Button disabled={!postContent.trim()}>Post</Button>
+          <Button disabled={(!postContent.trim() && !file) || loading} onClick={handleSubmit}>
+            {loading ? 'Posting...' : 'Post'}
+          </Button>
         </div>
       </DialogContent>
     </Dialog>
