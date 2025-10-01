@@ -55,7 +55,12 @@ function SellProductDialog({ children }: { children: React.ReactNode }) {
     )
 }
 
-export default function MarketplaceSection() {
+type MarketplaceSectionProps = {
+  initialProducts: any[]; // Replace 'any' with your Product type if available
+  initialAdverts: any[];  // Replace 'any' with your Advert type if available
+};
+
+export default function MarketplaceSection({ initialProducts, initialAdverts }: MarketplaceSectionProps) {
   const [activeCategory, setActiveCategory] = useState("All Products");
   const { user } = useAuth();
   const [products, setProducts] = useState<Product[]>([]);
