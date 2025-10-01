@@ -2,12 +2,11 @@ import Header from '@/components/layout/header';
 import Footer from '@/components/layout/footer';
 import NewfeedSection from '@/components/sections/newfeed-section';
 import LeaderboardPreview from '@/components/sections/leaderboard-preview';
-import { fetchPosts } from './actions';
-import { fetchAdvertisements } from '../advertisements/actions';
+import { fetchPostsWithProfiles } from './actions';
 
 export default async function NewfeedPage() {
-  const posts = await fetchPosts();
-  const ads = await fetchAdvertisements();
+  const posts = await fetchPostsWithProfiles();
+  const ads = []; // or fetch your ads as needed
   return (
     <div className="flex flex-col min-h-screen bg-secondary/50">
       <Header />

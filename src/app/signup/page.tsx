@@ -15,6 +15,7 @@ export default function SignupPage() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
+  const [name, setName] = useState('');
   const [loading, setLoading] = useState(false);
   const router = useRouter();
   const { toast } = useToast();
@@ -31,11 +32,21 @@ export default function SignupPage() {
     }
     setLoading(true);
     try {
-      const { error } = await supabase.auth.signUp({
+      const { data, error } = await supabase.auth.signUp({
         email,
         password,
       });
       if (error) throw error;
+
+      // Insert name into profile table if signup is successful
+      const user = data.user;
+      if (user) {
+        const { error: profileError } = await supabase
+          .from('profile')
+          .insert([{ id: user.id, full_name: name, email }]);
+        if (profileError) throw profileError;
+      }
+
       toast({ title: 'Signup Successful', description: 'Your account has been created.' });
       router.push('/');
     } catch (error: any) {
@@ -105,6 +116,17 @@ export default function SignupPage() {
                   type="password"
                   value={confirmPassword}
                   onChange={(e) => setConfirmPassword(e.target.value)}
+                  required
+                />
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="name">Full Name</Label>
+                <Input
+                  id="name"
+                  type="text"
+                  placeholder="Your Name"
+                  value={name}
+                  onChange={(e) => setName(e.target.value)}
                   required
                 />
               </div>

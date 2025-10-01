@@ -65,6 +65,7 @@ export default function MarketplaceSection({ initialProducts, initialAdverts }: 
   const { user } = useAuth();
   const [products, setProducts] = useState<Product[]>([]);
   const [loading, setLoading] = useState(true);
+  const [search, setSearch] = useState('');
 
   useEffect(() => {
     async function loadProducts() {
@@ -80,9 +81,17 @@ export default function MarketplaceSection({ initialProducts, initialAdverts }: 
     loadProducts();
   }, []);
 
-  const filteredProducts = products.filter(product =>
-    activeCategory === 'All Products' || product.category === activeCategory
-  );
+  // Improved filter: category and search
+  const filteredProducts = products.filter(product => {
+    const matchesCategory =
+      activeCategory === 'All Products' ||
+      (product.category && product.category.toLowerCase() === activeCategory.toLowerCase());
+    const matchesSearch =
+      !search ||
+      product.title?.toLowerCase().includes(search.toLowerCase()) ||
+      product.description?.toLowerCase().includes(search.toLowerCase());
+    return matchesCategory && matchesSearch;
+  });
 
   return (
     <ContentWrapper>
@@ -96,15 +105,20 @@ export default function MarketplaceSection({ initialProducts, initialAdverts }: 
       <div className="mt-8 flex flex-col md:flex-row gap-4">
         <div className="relative flex-grow">
           <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-muted-foreground" />
-          <Input placeholder="Search products..." className="pl-10 w-full bg-white" />
+          <Input
+            placeholder="Search products..."
+            className="pl-10 w-full bg-white"
+            value={search}
+            onChange={e => setSearch(e.target.value)}
+          />
         </div>
         {user && (
-            <SellProductDialog>
-                <Button className="bg-blue-600 hover:bg-blue-700 text-white">
-                    <Plus className="mr-2 h-4 w-4" />
-                    Sell Your Product
-                </Button>
-            </SellProductDialog>
+          <SellProductDialog>
+            <Button className="bg-blue-600 hover:bg-blue-700 text-white">
+              <Plus className="mr-2 h-4 w-4" />
+              Sell Your Product
+            </Button>
+          </SellProductDialog>
         )}
       </div>
       
@@ -120,8 +134,8 @@ export default function MarketplaceSection({ initialProducts, initialAdverts }: 
 
       <div className="mt-8 flex justify-center flex-wrap gap-2">
         {categories.map(category => (
-           <Button 
-            key={category} 
+          <Button
+            key={category}
             variant={activeCategory === category ? 'default' : 'outline'}
             onClick={() => setActiveCategory(category)}
             className={activeCategory === category ? 'bg-accent text-accent-foreground' : 'bg-white'}

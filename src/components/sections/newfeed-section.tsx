@@ -1,6 +1,7 @@
 'use client';
 
 import { useState } from 'react';
+import { fetchPostsWithProfiles } from '@/app/newfeed/actions';
 import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import Link from 'next/link';
@@ -15,6 +16,8 @@ import { formatDistanceToNow } from 'date-fns';
 import { createPost } from '@/app/newfeed/actions'; // Add this import
 import { supabase } from '@/lib/supabase';
 
+
+
 type Post = {
   id: string;
   content?: string;
@@ -24,6 +27,7 @@ type Post = {
   author?: string;
   user_id?: string;
   avatar_url?: string;
+  full_name?: string;
   likes?: number;
   comments?: number;
 };
@@ -41,15 +45,12 @@ interface NewfeedSectionProps {
   initialAds: Advertisement[];
 }
 
-function CreatePostCard() {
+function CreatePostCard({ onPost }: { onPost?: () => void }) {
   const [postContent, setPostContent] = useState('');
   const [loading, setLoading] = useState(false);
   const [file, setFile] = useState<File | null>(null);
   const [fileType, setFileType] = useState<'image' | 'video' | 'sticker' | null>(null);
   const { user } = useAuth();
-
-  // Add this state to trigger feed refresh if needed
-  // const [_, setRefresh] = useState(0);
 
   if (!user) {
     return (
@@ -67,7 +68,6 @@ function CreatePostCard() {
     );
   }
 
-  // Add this handler
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>, type: 'image' | 'video' | 'sticker') => {
     if (e.target.files && e.target.files[0]) {
       setFile(e.target.files[0]);
@@ -111,8 +111,7 @@ function CreatePostCard() {
       setPostContent('');
       setFile(null);
       setFileType(null);
-      // Optionally trigger a feed refresh here
-      // setRefresh(r => r + 1);
+      if (onPost) onPost(); // <-- Refresh feed after posting
     } catch (err) {
       alert('Failed to create post');
     } finally {
@@ -265,12 +264,12 @@ function PostCard({ post }: { post: Post }) {
     <div className="border rounded-lg p-6 mb-6 bg-white shadow">
       <div className="flex items-start gap-4">
         <Avatar>
-          {post.avatar_url && <AvatarImage src={post.avatar_url} alt={post.author || post.user_id || 'U'} />}
-          <AvatarFallback>{(post.author || post.user_id || 'U')[0].toUpperCase()}</AvatarFallback>
+          {post.avatar_url && <AvatarImage src={post.avatar_url} alt={post.full_name || post.author || post.user_id || 'U'} />}
+          <AvatarFallback>{(post.full_name || post.author || post.user_id || 'U')[0].toUpperCase()}</AvatarFallback>
         </Avatar>
         <div className="flex-grow">
           <div className="flex items-center gap-2">
-            <span className="font-bold">{post.author || post.user_id || 'Unknown'}</span>
+            <span className="font-bold">{post.full_name || post.author || post.user_id || 'Unknown'}</span>
             <span className="text-sm text-muted-foreground">{timeAgo}</span>
           </div>
           <p className="mt-2 text-foreground/90 whitespace-pre-wrap">{post.content || post.description}</p>
@@ -306,12 +305,20 @@ function PostCard({ post }: { post: Post }) {
 }
 
 export default function NewfeedSection({ initialPosts, initialAds }: NewfeedSectionProps) {
-  const mixedFeed = insertAdsRandomly(initialPosts, initialAds, 5);
+  const [posts, setPosts] = useState<Post[]>(initialPosts);
+
+  // Refresh posts from server
+  const refreshPosts = async () => {
+    const freshPosts = await fetchPostsWithProfiles();
+    setPosts(freshPosts);
+  };
+
+  const mixedFeed = insertAdsRandomly(posts, initialAds, 5);
 
   return (
     <div className="space-y-6">
       <CreditBanner />
-      <CreatePostCard />
+      <CreatePostCard onPost={refreshPosts} />
       {mixedFeed.map((item, idx) =>
         'ad' in item ? (
           <AdvertisementCard key={`ad-${item.ad.id}`} ad={item.ad} />
@@ -322,4 +329,6 @@ export default function NewfeedSection({ initialPosts, initialAds }: NewfeedSect
     </div>
   );
 }
+
+
 
