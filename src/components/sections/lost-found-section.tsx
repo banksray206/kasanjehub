@@ -19,6 +19,7 @@ import { useAuth } from '@/hooks/use-auth';
 import Link from 'next/link';
 import CreditBanner from '../credit-banner';
 import { fetchLostItems } from '@/app/lost-found/actions';
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 
 function LostItemCard({ item }: { item: any }) {
   // image_urls is already an array
@@ -60,15 +61,22 @@ function LostItemCard({ item }: { item: any }) {
                     <Phone className="mr-2" />
                     <span className="truncate">{item.contact_phone}</span>
                 </Button>
-                <Button
-                  variant="outline"
-                  size="sm"
-                  className="w-full bg-gray-50 overflow-hidden"
-                  title={item.contact_email}
-                >
-                  <Mail className="mr-2" />
-                  <span className="truncate max-w-[90px] md:max-w-[160px]">{item.contact_email}</span>
-                </Button>
+                <Popover>
+                  <PopoverTrigger asChild>
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      className="w-full bg-gray-50 overflow-hidden"
+                      title={item.contact_email}
+                    >
+                      <Mail className="mr-2" />
+                      <span className="truncate max-w-[90px] md:max-w-[160px]">{item.contact_email}</span>
+                    </Button>
+                  </PopoverTrigger>
+                  <PopoverContent className="w-auto">
+                    <span className="break-all">{item.contact_email}</span>
+                  </PopoverContent>
+                </Popover>
             </CardContent>
         </Card>
         <p className="text-xs text-gray-500 text-right">Posted {item.created_date}</p>
