@@ -52,3 +52,45 @@ export async function createPost({
   if (error) throw error;
   return data;
 }
+
+// Like a post
+export async function likePost(postId: string, userId: string) {
+  // Try to insert a like
+  const { error } = await supabase
+    .from('post_likes')
+    .insert([{ post_id: postId, user_id: userId }]);
+  // If error is duplicate, ignore
+  if (error && !error.message.includes('duplicate key')) throw error;
+
+  // Get new like count
+  const { count } = await supabase
+    .from('post_likes')
+    .select('*', { count: 'exact', head: true })
+    .eq('post_id', postId);
+
+  return count || 0;
+}
+
+// Fetch comments for a post
+export async function fetchComments(postId: string) {
+  const { data, error } = await supabase
+    .from('comments')
+    .select('*, profile:user_id(full_name, avatar_url)')
+    .eq('post_id', postId)
+    .order('created_at', { ascending: true });
+  if (error) throw error;
+  return data;
+}
+
+// Add a comment
+
+
+export async function addComment({ post_id, user_id, content }: { post_id: string; user_id: string; content: string }) {
+  const { data, error } = await supabase
+    .from('comments')
+    .insert([{ post_id, user_id, content }])
+    .select('*, profile:user_id(full_name, avatar_url)')
+    .single();
+  if (error) throw error;
+  return data;
+}

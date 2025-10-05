@@ -15,8 +15,8 @@ import { Skeleton } from '@/components/ui/skeleton';
 import Link from 'next/link';
 
 const userProducts: Product[] = [
-  { id: '1', name: 'Primary class computer classes', price: '99,000', imageId: 'product-5', category: 'Services', rating: 5, reviewCount: 500 },
-  { id: '2', name: 'Berrykey Mens Vintage Hawaii', price: '28,000', imageId: 'product-8', category: 'Clothing', rating: 5, reviewCount: 0 },
+  { id: '1', name: 'Primary class computer classes', price: 99000, imageId: 'product-5', category: 'Services', rating: 5, reviewCount: 500 },
+  { id: '2', name: 'Berrykey Mens Vintage Hawaii', price: 28000, imageId: 'product-8', category: 'Clothing', rating: 5, reviewCount: 0 },
 ];
 
 export default function ProfileSection() {

@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import { fetchPostsWithProfiles } from '@/app/newfeed/actions';
+import { fetchPostsWithProfiles, likePost, fetchComments, addComment } from '@/app/newfeed/actions';
 import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import Link from 'next/link';
@@ -257,6 +257,35 @@ function AdvertisementCard({ ad }: { ad: Advertisement & { message?: string } })
 
 // Post card
 function PostCard({ post }: { post: Post }) {
+  const [likes, setLikes] = useState(post.likes ?? 0);
+  const [showComments, setShowComments] = useState(false);
+  const [comments, setComments] = useState<any[]>([]);
+  const [commentText, setCommentText] = useState('');
+  const { user } = useAuth();
+
+  const handleLike = async () => {
+    if (!user) return;
+    try {
+      const newCount = await likePost(post.id, user.id);
+      setLikes(newCount);
+    } catch {}
+  };
+
+  const handleShowComments = async () => {
+    setShowComments(!showComments);
+    if (!showComments) {
+      const data = await fetchComments(post.id);
+      setComments(data || []);
+    }
+  };
+
+  const handleAddComment = async () => {
+    if (!commentText.trim() || !user) return;
+    const newComment = await addComment({ post_id: post.id, user_id: user.id, content: commentText });
+    setComments([...comments, newComment]);
+    setCommentText('');
+  };
+
   const timeAgo = post.created_date
     ? formatDistanceToNow(new Date(post.created_date), { addSuffix: true })
     : '';
@@ -285,13 +314,13 @@ function PostCard({ post }: { post: Post }) {
             </div>
           )}
           <div className="flex items-center gap-6 mt-4 text-muted-foreground">
-            <button className="flex items-center gap-2 hover:text-primary transition-colors">
+            <button className="flex items-center gap-2 hover:text-primary transition-colors" onClick={handleLike}>
               <Heart className="h-5 w-5" />
-              <span>{post.likes ?? 0}</span>
+              <span>{likes}</span>
             </button>
-            <button className="flex items-center gap-2 hover:text-primary transition-colors">
+            <button className="flex items-center gap-2 hover:text-primary transition-colors" onClick={handleShowComments}>
               <MessageCircle className="h-5 w-5" />
-              <span>{post.comments ?? 0}</span>
+              <span>{comments.length}</span>
             </button>
             <button className="flex items-center gap-2 hover:text-primary transition-colors">
               <Share2 className="h-5 w-5" />
@@ -300,6 +329,37 @@ function PostCard({ post }: { post: Post }) {
           </div>
         </div>
       </div>
+      {/* Comments Section */}
+      {showComments && (
+        <div className="mt-4">
+          <div className="space-y-2">
+            {comments.map((c) => (
+              <div key={c.id} className="flex items-start gap-2">
+                <Avatar className="w-6 h-6">
+                  {c.profile?.avatar_url && <AvatarImage src={c.profile.avatar_url} alt={c.profile.full_name || 'U'} />}
+                  <AvatarFallback>{(c.profile?.full_name || 'U')[0].toUpperCase()}</AvatarFallback>
+                </Avatar>
+                <div>
+                  <span className="font-semibold">{c.profile?.full_name || 'User'}</span>
+                  <span className="ml-2 text-sm">{c.content}</span>
+                </div>
+              </div>
+            ))}
+          </div>
+          {user && (
+            <div className="flex gap-2 mt-2">
+              <Textarea
+                value={commentText}
+                onChange={e => setCommentText(e.target.value)}
+                placeholder="Write a comment..."
+                rows={1}
+                className="flex-grow"
+              />
+              <Button onClick={handleAddComment} disabled={!commentText.trim()}>Post</Button>
+            </div>
+          )}
+        </div>
+      )}
     </div>
   );
 }

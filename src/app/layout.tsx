@@ -1,7 +1,11 @@
 
 import type { Metadata } from 'next';
 import './globals.css';
-import { cn } from '@/lib/utils';
+// Ensure the cn utility is correctly imported and implemented
+// If you do not have a cn function, you can use a simple implementation like:
+export function cn(...classes: string[]) {
+  return classes.filter(Boolean).join(' ');
+}
 import { Toaster } from "@/components/ui/toaster";
 import { AuthProvider } from '@/hooks/use-auth';
 import { CartProvider } from '@/hooks/use-cart';

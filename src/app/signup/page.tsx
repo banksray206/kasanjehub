@@ -38,13 +38,11 @@ export default function SignupPage() {
       });
       if (error) throw error;
 
-      // Insert name into profile table if signup is successful
       const user = data.user;
       if (user) {
-        const { error: profileError } = await supabase
-          .from('profile')
-          .insert([{ id: user.id, full_name: name, email }]);
-        if (profileError) throw profileError;
+        await supabase.from('profile').insert([
+          { id: user.id, full_name: name, email: user.email }
+        ]);
       }
 
       toast({ title: 'Signup Successful', description: 'Your account has been created.' });
