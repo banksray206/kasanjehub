@@ -231,6 +231,14 @@ export default function MessagesSection() {
     </div>
   </div>
 )}
+
+<Button
+  className="fixed bottom-24 right-4 z-50 md:hidden rounded-full h-14 w-14 flex items-center justify-center shadow-lg bg-primary text-white"
+  onClick={() => setShowUserPicker(true)}
+  aria-label="Start a new conversation"
+>
+  <Send className="h-7 w-7" />
+</Button>
         </div>
     )
 }
