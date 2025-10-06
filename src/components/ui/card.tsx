@@ -60,7 +60,12 @@ const CardContent = React.forwardRef<
   HTMLDivElement,
   React.HTMLAttributes<HTMLDivElement>
 >(({ className, ...props }, ref) => (
-  <div ref={ref} className={cn("p-6 pt-0", className)} {...props} />
+  <div
+    ref={ref}
+    className={cn("flex-grow p-4 md:p-6 overflow-y-auto bg-gray-50/50", className)}
+    style={{ maxHeight: '60vh' }}
+    {...props}
+  />
 ))
 CardContent.displayName = "CardContent"
 
