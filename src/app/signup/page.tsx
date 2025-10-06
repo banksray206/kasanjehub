@@ -17,6 +17,7 @@ export default function SignupPage() {
   const [confirmPassword, setConfirmPassword] = useState('');
   const [name, setName] = useState('');
   const [loading, setLoading] = useState(false);
+  const [showConfirmation, setShowConfirmation] = useState(false);
   const router = useRouter();
   const { toast } = useToast();
 
@@ -45,6 +46,10 @@ export default function SignupPage() {
         ]);
       }
 
+      setShowConfirmation(true);
+      // Optionally redirect after a delay:
+      setTimeout(() => router.push('/confirm-email'), 2000);
+
       toast({ title: 'Signup Successful', description: 'Your account has been created.' });
       router.push('/');
     } catch (error: any) {
@@ -57,6 +62,17 @@ export default function SignupPage() {
       setLoading(false);
     }
   };
+
+  if (showConfirmation) {
+    return (
+      <div className="p-8 text-center">
+        <h2 className="text-2xl font-bold mb-4">Check your email</h2>
+        <p>
+          We’ve sent you a confirmation link. Please check your inbox and click the link to verify your email address. And come back and login.
+        </p>
+      </div>
+    );
+  }
 
   return (
     <div className="flex min-h-screen items-center justify-center bg-gray-100 dark:bg-gray-900">
