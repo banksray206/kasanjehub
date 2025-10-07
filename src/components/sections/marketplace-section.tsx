@@ -10,6 +10,7 @@ import { AlertDescription } from '@/components/ui/alert';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger, DialogFooter } from '@/components/ui/dialog';
 import { Search, Plus } from 'lucide-react';
 import { useAuth } from '@/hooks/use-auth';
+import { useCart } from '@/hooks/use-cart';
 import Link from 'next/link';
 import CreditBanner from '../credit-banner';
 import { fetchProducts } from '@/app/products/actions';
@@ -63,6 +64,7 @@ type MarketplaceSectionProps = {
 export default function MarketplaceSection({ initialProducts, initialAdverts }: MarketplaceSectionProps) {
   const [activeCategory, setActiveCategory] = useState("All Products");
   const { user } = useAuth();
+  const { addToCart } = useCart();
   const [products, setProducts] = useState<Product[]>([]);
   const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState('');
@@ -155,6 +157,7 @@ export default function MarketplaceSection({ initialProducts, initialAdverts }: 
             <ProductCard
               key={product.id}
               product={product}
+              onAddToCart={addToCart}
             />
           ))
         )}

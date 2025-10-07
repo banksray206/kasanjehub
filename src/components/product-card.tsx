@@ -6,8 +6,9 @@ import { Badge } from '@/components/ui/badge';
 import { RatingStars } from '@/components/ui/rating-stars';
 import { useCart } from '@/hooks/use-cart';
 
-export interface Product {
+export type Product = {
   id: string;
+  name: string; // <-- Add this line
   title: string;
   description: string;
   price: number;
@@ -26,9 +27,10 @@ export interface Product {
 
 interface ProductCardProps {
   product: Product;
+  onAddToCart?: (product: Product) => void;
 }
 
-export function ProductCard({ product }: ProductCardProps) {
+export function ProductCard({ product, onAddToCart }: ProductCardProps) {
   const { addToCart } = useCart();
   const { 
     title, price, currency, category, rating, review_count, image_url, 
@@ -66,10 +68,11 @@ export function ProductCard({ product }: ProductCardProps) {
             <span>({review_count})</span>
         </div>
         {seller_name && <div className="text-xs text-muted-foreground">Seller: {seller_name}</div>}
-        <Button variant="outline" className="w-full border-green-500 text-green-500 hover:bg-green-500 hover:text-white" onClick={() => addToCart(product)} disabled={!in_stock}>
-            <ShoppingCart />
+        {onAddToCart && (
+          <Button onClick={() => onAddToCart(product)} className="w-full mt-2" disabled={!in_stock}>
             Add to Cart
-        </Button>
+          </Button>
+        )}
       </CardContent>
     </Card>
   );

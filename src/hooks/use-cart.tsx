@@ -1,23 +1,33 @@
+"use client";
 
-'use client';
+import { createContext, useContext, useState } from "react";
+import type { Product } from "@/components/product-card";
+import { useToast } from "./use-toast";
 
-import { createContext, useContext, useState, ReactNode } from 'react';
-import type { Product } from '@/components/product-card';
-import { useToast } from './use-toast';
-
-interface CartItem extends Product {
+// Define CartItem type
+export type CartItem = {
+  id: string;
+  title: string;
+  price: number;
   quantity: number;
-}
+  image_url?: string; // <-- add this line
+};
 
-interface CartContextType {
+export interface CartContextType {
   cart: CartItem[];
-  addToCart: (product: Product) => void;
-  // Future methods: removeFromCart, updateQuantity, etc.
+  addToCart: (item: Product) => void;
+  removeFromCart: (id: string) => void;
+  clearCart: () => void;
 }
 
-const CartContext = createContext<CartContextType | undefined>(undefined);
+const CartContext = createContext<CartContextType>({
+  cart: [],
+  addToCart: () => {},
+  removeFromCart: () => {},
+  clearCart: () => {},
+});
 
-export function CartProvider({ children }: { children: ReactNode }) {
+export function CartProvider({ children }: { children: React.ReactNode }) {
   const [cart, setCart] = useState<CartItem[]>([]);
   const { toast } = useToast();
 
@@ -32,13 +42,19 @@ export function CartProvider({ children }: { children: ReactNode }) {
       return [...prevCart, { ...product, quantity: 1 }];
     });
     toast({
-        title: "Added to cart",
-        description: `${product.name} has been added to your cart.`,
-    })
+      title: "Added to cart",
+      description: `${product.title} has been added to your cart.`, // <-- use title
+    });
   };
 
+  const removeFromCart = (id: string) => {
+    setCart((cart) => cart.filter((item) => item.id !== id));
+  };
+
+  const clearCart = () => setCart([]);
+
   return (
-    <CartContext.Provider value={{ cart, addToCart }}>
+    <CartContext.Provider value={{ cart, addToCart, removeFromCart, clearCart }}>
       {children}
     </CartContext.Provider>
   );
@@ -47,7 +63,7 @@ export function CartProvider({ children }: { children: ReactNode }) {
 export function useCart() {
   const context = useContext(CartContext);
   if (context === undefined) {
-    throw new Error('useCart must be used within a CartProvider');
+    throw new Error("useCart must be used within a CartProvider");
   }
   return context;
 }

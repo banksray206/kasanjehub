@@ -2,7 +2,7 @@
 
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-import { Store, Newspaper, MapPin, Medal, User, LogIn, LogOut, MessageSquare, Shield } from 'lucide-react';
+import { Store, Newspaper, MapPin, Medal, User, LogIn, LogOut, MessageSquare, Shield, ShoppingCart } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useAuth } from '@/hooks/use-auth';
 import { useToast } from '@/hooks/use-toast';
@@ -16,6 +16,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
 import { Avatar, AvatarFallback } from '../ui/avatar';
+import { useCart } from '@/hooks/use-cart';
 
 const navLinks = [
   { href: '/', label: 'Marketplace', icon: Store },
@@ -31,6 +32,7 @@ export default function Header() {
   const { toast } = useToast();
   const adminEmails = ['kawooyaraymond40@gmail.com', 'banksray206@gmail.com'];
   const isAdmin = user && user.email && adminEmails.includes(user.email);
+  const { cart } = useCart();
 
   const handleLogout = async () => {
     try {
@@ -115,6 +117,15 @@ export default function Header() {
                   </Link>
                 </Button>
               )}
+              <Link href="/cart" className="relative flex items-center gap-2 text-foreground/80 transition-colors hover:text-foreground">
+                <ShoppingCart className="h-5 w-5" />
+                Cart
+                {cart.length > 0 && (
+                  <span className="absolute -top-2 -right-2 bg-primary text-white rounded-full h-5 w-5 flex items-center justify-center text-xs">
+                    {cart.length}
+                  </span>
+                )}
+              </Link>
             </>
           )}
         </div>
