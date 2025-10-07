@@ -2,7 +2,7 @@
 
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-import { Store, Newspaper, MapPin, Medal, User, LogIn, LogOut, MessageSquare, Shield, ShoppingCart } from 'lucide-react';
+import { Store, Newspaper, MapPin, Medal, User, LogIn, LogOut, MessageSquare, Shield, ShoppingCart, ShoppingBag } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useAuth } from '@/hooks/use-auth';
 import { useToast } from '@/hooks/use-toast';
@@ -24,6 +24,7 @@ const navLinks = [
   { href: '/lost-found', label: 'Lost & Found', icon: MapPin },
   { href: '/leaderboard', label: 'Leaderboard', icon: Medal },
   { href: '/messages', label: 'Messages', icon: MessageSquare },
+  { href: '/orders', label: 'My Orders', icon: ShoppingBag },
 ];
 
 export default function Header() {
@@ -125,6 +126,13 @@ export default function Header() {
                     {cart.length}
                   </span>
                 )}
+              </Link>
+              <Link
+                href="/orders"
+                className="relative flex items-center gap-2 text-foreground/80 transition-colors hover:text-foreground md:hidden"
+              >
+                <ShoppingBag className="h-5 w-5" />
+                Orders
               </Link>
             </>
           )}
