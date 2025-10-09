@@ -84,11 +84,11 @@ export default function Header() {
               {user ? (
                 <DropdownMenu>
                   <DropdownMenuTrigger asChild>
-                     <Button variant="ghost" className="relative h-8 w-8 rounded-full">
-                        <Avatar className="h-8 w-8">
-                           <AvatarFallback>{user.email?.[0].toUpperCase()}</AvatarFallback>
-                        </Avatar>
-                     </Button>
+                    <Button variant="ghost" className="relative h-8 w-8 rounded-full">
+                      <Avatar className="h-8 w-8">
+                        <AvatarFallback>{user.email?.[0].toUpperCase()}</AvatarFallback>
+                      </Avatar>
+                    </Button>
                   </DropdownMenuTrigger>
                   <DropdownMenuContent className="w-56" align="end" forceMount>
                     <DropdownMenuLabel className="font-normal">
@@ -101,7 +101,7 @@ export default function Header() {
                     </DropdownMenuLabel>
                     <DropdownMenuSeparator />
                     <DropdownMenuItem asChild>
-                       <Link href="/profile"><User className="mr-2 h-4 w-4" />Profile</Link>
+                      <Link href="/profile"><User className="mr-2 h-4 w-4" />Profile</Link>
                     </DropdownMenuItem>
                     <DropdownMenuSeparator />
                     <DropdownMenuItem onClick={handleLogout}>
@@ -111,28 +111,33 @@ export default function Header() {
                   </DropdownMenuContent>
                 </DropdownMenu>
               ) : (
-                <Button asChild>
-                  <Link href="/login">
-                    <LogIn className="mr-2 h-4 w-4" />
-                    Login
+                <Button
+                  asChild
+                  className="px-3 py-1.5 text-sm h-8 flex items-center justify-center bg-green-600 hover:bg-green-700 text-white transition-colors"
+                >
+                  <Link href="/login" className="flex items-center gap-2">
+                    <LogIn className="h-5 w-5 md:mr-2" />
+                    <span className="hidden md:inline">Login</span>
                   </Link>
                 </Button>
               )}
+              {/* Cart Button */}
               <Link href="/cart" className="relative flex items-center gap-2 text-foreground/80 transition-colors hover:text-foreground">
                 <ShoppingCart className="h-5 w-5" />
-                Cart
+                <span className="hidden md:inline">Cart</span>
                 {cart.length > 0 && (
                   <span className="absolute -top-2 -right-2 bg-primary text-white rounded-full h-5 w-5 flex items-center justify-center text-xs">
                     {cart.length}
                   </span>
                 )}
               </Link>
+              {/* Orders Button */}
               <Link
                 href="/orders"
-                className="relative flex items-center gap-2 text-foreground/80 transition-colors hover:text-foreground md:hidden"
+                className="relative flex items-center gap-2 text-foreground/80 transition-colors hover:text-foreground"
               >
                 <ShoppingBag className="h-5 w-5" />
-                Orders
+                <span className="hidden md:inline">Orders</span>
               </Link>
             </>
           )}
